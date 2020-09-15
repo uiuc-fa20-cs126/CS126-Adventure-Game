@@ -1,0 +1,111 @@
+[
+  {
+    "roomName": "StartingRoom",
+    "description": "You are in a dark room. You are angry.",
+    "items": [
+      "baseball bat"
+    ],
+    "directionExits": [
+      {
+        "direction": "East",
+        "nextRoom": "Hallway2Men",
+        "description": "A hallway. You can hear the voices of two men talking.",
+        "outcomeText": ""
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "",
+        "description": "You smack the wall with your fist. The wall cowers at your might."
+      }
+    ]
+  },
+  {
+    "roomName": "StartingRoom1Man",
+    "description": "You are in a dark room. You are angry, but less so now.",
+    "items": [
+    ],
+    "directionExits": [
+      {
+        "direction": "East",
+        "nextRoom": "Hallway1Man",
+        "description": "A hallway. You can hear one of the jailers trying to wake up the other.",
+        "outcomeText": ""
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "",
+        "description": "You smack the wall with your fist. The wall cowers at your might."
+      }
+    ]
+  },
+  {
+    "roomName": "Hallway2Men",
+    "description": "You are standing in a hallway, two men see you and yell at you to go back to your cell. They approach rapidly.",
+    "items": [],
+    "directionExits": [
+      {
+        "direction": "West",
+        "nextRoom": "StartingRoom",
+        "description": "Your prison cell.",
+        "outcomeText": "You run back into your cell, the men stop chasing you."
+      },
+      {
+        "direction": "East",
+        "nextRoom": "StartingRoom",
+        "description": "Run past the guards.",
+        "outcomeText": "You attempt to run past the two jailers. They grab you and drag you back to your cell."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "baseball bat",
+        "nextRoom": "Hallway1Man",
+        "description": "You smack one of the jailers with a baseball bat. He appears to be knocked out."
+      },
+      {
+        "item": "default",
+        "nextRoom": "StartingRoom",
+        "description": "You swing your fists wildly, but the jailers outnumber you. They bonk you on the head and drag you back to your cell."
+      }
+    ]
+  },
+  {
+    "roomName": "Hallway1Man",
+    "description": "The other jailer is in shock, after all, you broke a baseball bat on his coworker's head.",
+    "items": [],
+    "directionExits": [
+      {
+        "direction": "West",
+        "nextRoom": "StartingRoom1Man",
+        "description": "Your prison cell.",
+        "outcomeText": "You run back into your cell, the man stops chasing you."
+      },
+      {
+        "direction": "East",
+        "nextRoom": "Cafeteria",
+        "description": "Run past the guard.",
+        "outcomeText": "You are able to run past the guard, who is still in shock. You exit out the hallway."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "Cafeteria",
+        "description": "You smack the second guard with your fist. He staggers back and you are able to run past him and exit out the hallway."
+      }
+    ]
+  },
+  {
+    "roomName": "Cafeteria",
+    "description": "You come out into what appears to be a cafeteria. You see various prison",
+    "items": [],
+    "directionExits": [
+    ],
+    "smackExits": [
+    ]
+  }
+]
