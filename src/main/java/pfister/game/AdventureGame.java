@@ -88,6 +88,23 @@ public class AdventureGame {
   }
 
   /**
+   * Drops an item in a room
+   * @param item the item to drop
+   * @return a string describing the interaction
+   */
+  public String drop(String item) {
+    if (item.isEmpty()) {
+      return "Drop what?";
+    }
+    if (!inventory.contains(item)) {
+      return "There is no item '" + item + "' in your inventory.";
+    }
+    inventory.remove(item);
+    currentRoom.addItem(item);
+    return "You drop the '" + item + "'.";
+  }
+
+  /**
    * Attempt to move the player to another room using a DirectionExit, updates the currentRoom
    * variable upon success
    *

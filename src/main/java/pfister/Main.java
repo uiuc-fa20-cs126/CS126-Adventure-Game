@@ -56,6 +56,9 @@ public class Main {
         case "take":
           output = game.take(currentCommand.argument);
           break;
+        case "drop":
+          output = game.drop(currentCommand.argument);
+          break;
         case "help":
           output = "Valid commands are: examine, take, smack, go, help, and quit/exit.";
           break;
