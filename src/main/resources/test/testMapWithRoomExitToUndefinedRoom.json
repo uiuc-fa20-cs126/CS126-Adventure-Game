@@ -1,0 +1,15 @@
+[
+  {
+    "roomName": "StartingRoom",
+    "description": "",
+    "items": [],
+    "directionExits": [
+      {
+        "nextRoom": "test2",
+        "description": "",
+        "direction": "North"
+      }
+    ],
+    "smackExits": []
+  }
+]

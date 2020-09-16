@@ -1,0 +1,17 @@
+[
+  {
+    "roomName": "StartingRoom",
+    "description": "",
+    "items": [],
+    "directionExits": [
+      {
+        "direction": "Yeast",
+        "nextRoom": "",
+        "description": "",
+        "outcomeText": ""
+      }
+    ],
+    "smackExits": []
+
+  }
+]
