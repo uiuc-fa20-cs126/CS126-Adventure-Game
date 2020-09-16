@@ -20,11 +20,11 @@ public class Main {
   public static Command promptForInput() {
     System.out.print("> ");
     String readLine = "";
-    while (readLine.equals("")) {
+    while (readLine.isEmpty()) {
       readLine = scanner.nextLine();
     }
-    String[] split = readLine.split("\\s");
-    String commandString = split[0].trim();
+    String[] split = readLine.trim().split("\\s");
+    String commandString = split[0];
     String argumentString = "";
     if (split.length > 1) {
       split[0] = "";
@@ -60,7 +60,7 @@ public class Main {
           output = game.drop(currentCommand.argument);
           break;
         case "help":
-          output = "Valid commands are: examine, take, smack, go, help, and quit/exit.";
+          output = "Valid commands are: examine, take, drop, smack, go, help, and quit/exit.";
           break;
         case "go":
           Optional<Direction> direction = Direction.parseDirection(currentCommand.argument);

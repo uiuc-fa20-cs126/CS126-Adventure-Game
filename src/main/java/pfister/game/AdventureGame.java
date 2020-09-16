@@ -2,6 +2,7 @@ package pfister.game;
 
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +29,15 @@ public class AdventureGame {
     inventory = new HashSet<>();
   }
 
+  public Room getCurrentRoom() {
+    return currentRoom;
+  }
+
+  public Set<String> getInventory() {
+    return Collections.unmodifiableSet(inventory);
+  }
+
+
   /**
    * Sets up a room before the player moves into it Currently removes any items that the player
    * already has in their inventory from the room
@@ -44,6 +54,7 @@ public class AdventureGame {
 
   /**
    * Checks to see if the player has won by looking if they are in the "win" room
+   *
    * @return a boolean indicating if the player has won the game
    */
   public boolean hasPlayerWon() {
@@ -89,6 +100,7 @@ public class AdventureGame {
 
   /**
    * Drops an item in a room
+   *
    * @param item the item to drop
    * @return a string describing the interaction
    */
@@ -151,7 +163,8 @@ public class AdventureGame {
             .map(e -> Pair.of(e.getKey(), e.getValue()))
             .findFirst();
 
-    // If we have no item smack exits defined for this room, use the default smack interaction if defined
+    // If we have no item smack exits defined for this room, use the default smack interaction if
+    // defined
     if (!itemAndExitUsed.isPresent()) {
       Optional<SmackExit> exit = gameMap.getDefaultSmackExitForRoom(currentRoom);
       if (!exit.isPresent()) {

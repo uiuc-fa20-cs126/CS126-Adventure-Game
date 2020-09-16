@@ -28,18 +28,25 @@ public class GameMap {
   private final Graph<Room, RoomExit> roomGraph;
 
   /**
-   * Constructs the game map from a json file Creates a graph where the vertices are the rooms, and
-   * the edges are the potential exits from those rooms Either from a "go" command (DirectionExit),
-   * or a "smack" command (SmackExit)
-   *
-   * @param jsonPath the path to the locat
+   * Loads the json file from the path, then constructs the GameMap
+   * @param jsonPath the path to the JSON file
    * @throws IOException If the the json file cannot be read or does not exist at the passed
    *     location
    * @throws InvalidArgumentException If the json file cannot be validly parsed as a game map
    */
   public GameMap(String jsonPath) throws IOException, InvalidArgumentException {
+    this(readJsonMapFile(jsonPath));
+  }
+  /**
+   * Constructs the game map from a json file.
+   * Creates a graph where the vertices are the rooms, and
+   * the edges are the potential exits from those rooms.
+   * Either from a "go" command (DirectionExit),or a "smack" command (SmackExit)
+   * @param jsonRooms a JsonArray containing a list of rooms
+   * @throws InvalidArgumentException If the json file cannot be validly parsed as a game map
+   */
+  public GameMap(JsonArray jsonRooms) throws InvalidArgumentException {
     roomGraph = new DirectedPseudograph<>(RoomExit.class);
-    JsonArray jsonRooms = readJsonMapFile(jsonPath);
     Map<Room, List<RoomExit>> roomToExitsMap = createRoomToExitsMap(jsonRooms);
 
     // Add all rooms to graph before iteration, so we can add edges between them
@@ -68,6 +75,29 @@ public class GameMap {
         roomGraph.addEdge(exits.getKey(), nextRoom.get(), roomExit);
       }
     }
+  }
+
+  /**
+   * Loads a JSON file from a path, validates that it can be read, and parses it into a JSON array
+   *
+   * @param jsonPath a string containing the location of the json map file
+   * @return a JsonArray containing the map rooms
+   * @throws IOException If the path specified is not found, or could not be opened for reading
+   * @throws InvalidArgumentException If the json file is not a valid json file, or does not have a
+   *     top level array object
+   */
+  private static JsonArray readJsonMapFile(String jsonPath) throws IOException, InvalidArgumentException {
+    FileReader reader = new FileReader(jsonPath);
+    JsonArray rooms;
+    try {
+      rooms = (JsonArray) JsonParser.parseReader(reader);
+    } catch (ClassCastException | JsonIOException | JsonSyntaxException e) {
+      throw new InvalidArgumentException(
+          new String[] {
+            "Passed file cannot be parsed as a JSON file or the top level object is not an array."
+          });
+    }
+    return rooms;
   }
 
   /**
@@ -109,12 +139,12 @@ public class GameMap {
       if (room.getRoomName() == null || room.getItems() == null || room.getDescription() == null) {
         throw new InvalidArgumentException(
             new String[] {
-              "Roomm object must have defined fields of : roomName, items, description. Room: "
+              "Room object must have defined fields of : roomName, items, description. Room: "
                   + jsonRoom.toString()
             });
       }
       // Check for room name uniqueness
-      if (StreamEx.of(roomGraph.vertexSet())
+      if (StreamEx.of(roomToExitsMap.keySet())
           .findAny(v -> v.getRoomName().equals(room.getRoomName()))
           .isPresent()) {
         throw new InvalidArgumentException(
@@ -125,6 +155,9 @@ public class GameMap {
       List<DirectionExit> dirExits;
       try {
         dirExits = Arrays.asList(gson.fromJson(jsonDirExits, DirectionExit[].class));
+        if (StreamEx.of(dirExits).findAny(d -> d.getDirection() == null).isPresent()) {
+          throw new JsonSyntaxException("");
+        }
       } catch (JsonSyntaxException e) {
         throw new InvalidArgumentException(
             new String[] {
@@ -144,6 +177,9 @@ public class GameMap {
       List<SmackExit> smackExits;
       try {
         smackExits = Arrays.asList(gson.fromJson(jsonSmackExits, SmackExit[].class));
+        if (StreamEx.of(smackExits).findAny(d -> d.getItemUsed() == null).isPresent()) {
+          throw new JsonSyntaxException("");
+        }
       } catch (JsonSyntaxException e) {
         throw new InvalidArgumentException(
             new String[] {
@@ -174,29 +210,6 @@ public class GameMap {
           });
     }
     return roomToExitsMap;
-  }
-
-  /**
-   * Loads a JSON file from a path, validates that it can be read, and parses it into a JSON array
-   *
-   * @param jsonPath a string containing the location of the json map file
-   * @return a JsonArray containing the map rooms
-   * @throws IOException If the path specified is not found, or could not be opened for reading
-   * @throws InvalidArgumentException If the json file is not a valid json file, or does not have a
-   *     top level array object
-   */
-  private JsonArray readJsonMapFile(String jsonPath) throws IOException, InvalidArgumentException {
-    FileReader reader = new FileReader(jsonPath);
-    JsonArray rooms;
-    try {
-      rooms = (JsonArray) JsonParser.parseReader(reader);
-    } catch (ClassCastException | JsonIOException | JsonSyntaxException e) {
-      throw new InvalidArgumentException(
-          new String[] {
-            "Passed file cannot be parsed as a JSON file or the top level object is not an array."
-          });
-    }
-    return rooms;
   }
 
   /**
