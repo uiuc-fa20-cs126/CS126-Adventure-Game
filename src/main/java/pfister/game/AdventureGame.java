@@ -42,6 +42,10 @@ public class AdventureGame {
     return r;
   }
 
+  /**
+   * Checks to see if the player has won by looking if they are in the "win" room
+   * @return a boolean indicating if the player has won the game
+   */
   public boolean hasPlayerWon() {
     return this.currentRoom.getRoomName().equalsIgnoreCase("win");
   }
@@ -130,6 +134,7 @@ public class AdventureGame {
             .map(e -> Pair.of(e.getKey(), e.getValue()))
             .findFirst();
 
+    // If we have no item smack exits defined for this room, use the default smack interaction if defined
     if (!itemAndExitUsed.isPresent()) {
       Optional<SmackExit> exit = gameMap.getDefaultSmackExitForRoom(currentRoom);
       if (!exit.isPresent()) {
