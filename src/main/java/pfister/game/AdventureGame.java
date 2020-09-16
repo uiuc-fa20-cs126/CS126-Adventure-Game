@@ -3,28 +3,74 @@ package pfister.game;
 import com.sun.javaws.exceptions.InvalidArgumentException;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import one.util.streamex.EntryStream;
+import one.util.streamex.StreamEx;
+import org.jgrapht.alg.util.Pair;
 
 public class AdventureGame {
-  private GameMap gameMap;
+  private final GameMap gameMap;
+  private final Set<String> inventory;
   private Room currentRoom;
-  private Set<String> inventory;
 
+  /**
+   * Construct the AdventureGame object from a json file
+   *
+   * @param jsonPath the file location of the json file
+   * @throws IOException If the json file cannot be read or is not present at that location
+   * @throws InvalidArgumentException If the json file cannot be parsed as a valid game map
+   */
   public AdventureGame(String jsonPath) throws IOException, InvalidArgumentException {
     gameMap = new GameMap(jsonPath);
     currentRoom = gameMap.getStartingRoom();
     inventory = new HashSet<>();
   }
 
+  /**
+   * Sets up a room before the player moves into it Currently removes any items that the player
+   * already has in their inventory from the room
+   *
+   * @param r the room to set up
+   * @return the room, after being set up
+   */
+  private Room setupRoom(Room r) {
+    for (String item : inventory) {
+      r.removeItem(item);
+    }
+    return r;
+  }
+
+  public boolean hasPlayerWon() {
+    return this.currentRoom.getRoomName().equalsIgnoreCase("win");
+  }
+
+  /**
+   * Examines the current room the player is in
+   *
+   * @return a string of information about the current room
+   */
   public String examine() {
     String examineString = this.currentRoom.getDescription();
-    examineString += "\nItems: " + String.join(",",this.currentRoom.getItems());
+    if (hasPlayerWon()) {
+      return examineString;
+    }
+    examineString += "\nInventory: " + String.join(",", this.inventory);
+    examineString += "\nItems Visible: " + String.join(",", this.currentRoom.getItems());
     for (DirectionExit dirExit : gameMap.getDirectionExitsForRoom(currentRoom)) {
-      examineString += "\nTo the " + dirExit.direction.toString() + ": " + dirExit.getDescription();
+      examineString +=
+          "\nTo the " + dirExit.getDirection().toString() + ": " + dirExit.getDescription();
     }
     return examineString;
   }
+
+  /**
+   * Attempt to take an item from the current room and place it in the user's inventory
+   *
+   * @param item the item to take from the current room
+   * @return a string describing the interaction
+   */
   public String take(String item) {
     if (item.isEmpty()) {
       return "Take what?";
@@ -36,42 +82,70 @@ public class AdventureGame {
     inventory.add(item);
     return "You take the '" + item + "'.";
   }
+
+  /**
+   * Attempt to move the player to another room using a DirectionExit, updates the currentRoom
+   * variable upon success
+   *
+   * @param direction the direction to attempt to move the player
+   * @return a string describing the interaction
+   */
   public String go(Direction direction) {
     Set<DirectionExit> directionExits = gameMap.getDirectionExitsForRoom(currentRoom);
-    Optional<DirectionExit> exit = directionExits.stream().filter(v -> v.direction == direction).findFirst();
+    Optional<DirectionExit> exit =
+        StreamEx.of(directionExits).findFirst(e -> e.getDirection() == direction);
+
     if (!exit.isPresent()) {
       return "You cannot go " + direction + " from here.";
     }
-    currentRoom = gameMap.getNextRoom(exit.get()).get();
-    if (!exit.get().outcomeText.isEmpty()) {
-      return exit.get().outcomeText + "\n\n" + examine();
+    currentRoom = setupRoom(gameMap.getNextRoom(exit.get()).get());
+
+    if (!exit.get().getOutcomeText().isEmpty()) {
+      return exit.get().getOutcomeText() + "\n\n" + examine();
     }
-    else {
-      return examine();
-    }
+
+    return examine();
   }
+
+  /**
+   * Attempt to move the player to another room using a SmackExit, updates the currentRoom variable
+   * upon success Checks the user's inventory to determine which smack exit to take
+   *
+   * @return a string describing the interaction
+   */
   public String smack() {
     Set<SmackExit> smackExits = gameMap.getSmackExitsForRoom(currentRoom);
-    String usedItem = "";
-    Optional<SmackExit> exit = Optional.empty();
-    for (String item : inventory) {
-      exit = smackExits.stream().filter(s -> s.itemUsed.equalsIgnoreCase(item)).findFirst();
-      if (exit.isPresent()) {
-        break;
-      }
-    }
-    if (!exit.isPresent()) {
-      exit = gameMap.getDefaultSmackExitForRoom(currentRoom);
+
+    // Create a map between items in inventory to their SmackExit's, or Optional.empty() if they
+    // don't have one
+    Map<String, Optional<SmackExit>> itemToExitMap =
+        StreamEx.of(inventory)
+            .toMap(i -> StreamEx.of(smackExits).findFirst(e -> e.getItemUsed().equals(i)));
+
+    // Filter out the items that do not have an associated SmackExit, then grab the first entry and
+    // use that
+    Optional<Pair<String, SmackExit>> itemAndExitUsed =
+        EntryStream.of(itemToExitMap)
+            .flatMapValues(StreamEx::of)
+            .map(e -> Pair.of(e.getKey(), e.getValue()))
+            .findFirst();
+
+    if (!itemAndExitUsed.isPresent()) {
+      Optional<SmackExit> exit = gameMap.getDefaultSmackExitForRoom(currentRoom);
       if (!exit.isPresent()) {
         return "You flail wildly and impressively. Nothing happens.";
       }
+      itemAndExitUsed = Optional.of(Pair.of("", exit.get()));
     }
-    currentRoom = gameMap.getNextRoom(exit.get()).get();
+    String usedItem = itemAndExitUsed.get().getFirst();
+    RoomExit exitUsed = itemAndExitUsed.get().getSecond();
+    currentRoom = setupRoom(gameMap.getNextRoom(exitUsed).get());
+
     if (usedItem.isEmpty()) {
-      return exit.get().getDescription() + "\n\n" + examine();
+      return exitUsed.getDescription() + "\n\n" + examine();
     }
 
-    return exit.get().getDescription() + "\nThe " + usedItem + " breaks.\n\n" + examine();
-
+    inventory.remove(usedItem);
+    return exitUsed.getDescription() + "\nThe " + usedItem + " breaks.\n\n" + examine();
   }
 }

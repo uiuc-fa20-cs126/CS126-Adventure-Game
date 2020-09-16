@@ -1,7 +1,6 @@
 package pfister.game;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,7 +9,12 @@ public class Room {
 
   private String roomName;
   private String description;
-  private Set<String> items;
+  /**
+   * Items contained within a room Note that items are unique across the game If an item appears in
+   * a room and the player already has an item with the same name, that item will not appear within
+   * the room
+   */
+  private final Set<String> items;
 
   public Room(String roomName, String description, Set<String> items) {
     this.roomName = roomName;
@@ -35,16 +39,18 @@ public class Room {
   }
 
   public Set<String> getItems() {
+    if (items == null) return null;
     return Collections.unmodifiableSet(items);
   }
 
   /**
    * Checks to see whether an item is within this room
+   *
    * @param item the item to check for
    * @return boolean if the item is in this room or not
    */
   public boolean containsItem(String item) {
-    return this.items.contains(item);
+    return items.contains(item);
   }
 
   /**
