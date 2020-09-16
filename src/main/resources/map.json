@@ -88,24 +88,238 @@
         "direction": "East",
         "nextRoom": "Cafeteria",
         "description": "Run past the guard.",
-        "outcomeText": "You are able to run past the guard, who is still in shock. You exit out the hallway."
+        "outcomeText": "You are able to run past the guard, who is still in shock. You exit out the hallway.\nAs you leave the hallway, you hit the door closing button, and the hallway seals and locks behind you."
       }
     ],
     "smackExits": [
       {
         "item": "default",
         "nextRoom": "Cafeteria",
-        "description": "You smack the second guard with your fist. He staggers back and you are able to run past him and exit out the hallway."
+        "description": "You smack the second guard with your fist. He staggers back and you are able to run past him and exit out the hallway.\nAs you leave the hallway, you hit the door closing button, and the hallway seals and locks behind you."
       }
     ]
   },
   {
     "roomName": "Cafeteria",
-    "description": "You come out into what appears to be a cafeteria. You see various prison",
-    "items": [],
+    "description": "You come out into what appears to be a cafeteria.\nYou see various alien prisoners chained to their tables eating food.\nTo your right is a fire alarm.",
+    "items": [
+      "raygun"
+    ],
     "directionExits": [
     ],
     "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "PanickedCafeteria",
+        "description": "You smack the red fire alarm button. In an instant, nozzles come down from the ceiling and spray water. The prisoner's chains to their tables are unlocked."
+      }
     ]
+  },
+  {
+    "roomName": "PanickedCafeteria",
+    "description": "The aliens, now freed from their chains, proceed to start a riot. They are clashing with the guards in the Cafeteria head on.\nYou decide to use the chaos to escape the station.",
+    "items": [
+      "raygun"
+    ],
+    "directionExits": [
+      {
+        "direction": "North",
+        "nextRoom": "CafeteriaDoor",
+        "description": "The door exiting the cafeteria. There is a guard standing in the way, barking orders desperately.",
+        "outcomeText": "You move quickly towards the exit of the cafeteria"
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "",
+        "description": "You smack the fire alarm button again, for good measure."
+      }
+    ]
+  },
+  {
+    "roomName": "CafeteriaDoor",
+    "description": "The cafeteria door is blocked by a guard, he yells at you amid the chaos to return to your cell peacefully under threat of execution.",
+    "items": [],
+    "directionExits": [{
+      "direction": "North",
+      "nextRoom": "",
+      "description": "Attempt to maneuver past him.",
+      "outcomeText": "You ignore his command and start to take a step. He raises his raygun and commands you to step back.\nYou decide to follow his orders."
+    }],
+    "smackExits": [
+      {
+        "item": "raygun",
+        "nextRoom": "EscapePods",
+        "description": "You quickly point the raygun at the guard and pull the trigger. It does not shoot. In anger, you smack the gun.\nThe gun's plasma circuit starts to overload, with panicked surprise, you throw the gun at the guard.\nThe raygun collides with the guard, he and the gun implode into a micro singularity.\nYou head through the now unimpeded door."
+      },
+      {
+        "item": "default",
+        "nextRoom": "EscapePods",
+        "description": "You ignore his command and wind up a haymaker. Just as he raises his raygun to shoot you, he is abruptly and violently flattened by a massive alien.\nYou decide to not stick around and thank your saviour."
+      }
+    ]
+  },
+  {
+    "roomName": "EscapePods",
+    "description": "You exit the cafeteria into a long hallway with escape pods on the Western wall. Alarms are blaring.",
+    "items": ["crowbar"],
+    "directionExits": [
+      {
+        "direction": "East",
+        "nextRoom": "Office",
+        "description": "An office door. The door is ajar.",
+        "outcomeText": "You saunter through the office door."
+      },
+      {
+        "direction": "West",
+        "nextRoom": "EscapePodDoor",
+        "description": "A nearby escape pod.",
+        "outcomeText": "You head over to the escape pod."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "",
+        "description": "Overcome with an intense urge to smack something, you hurt yourself in your confusion."
+      }
+    ]
+  },
+  {
+    "roomName": "Office",
+    "description": "You enter into an impressive looking office, there is a desk with a computer open. You quickly search for things useful to escape.\nWhile you are searching, the door behind you slams closed.\nOver the intercom you hear a robotic voice.\n\"EMERGENCY LOCKDOWN ACTIVATED, STAY WHERE YOU ARE\"",
+    "items": ["keycard"],
+    "directionExits": [
+      {
+        "direction": "West",
+        "description": "The now-closed door to the office",
+        "nextRoom": "",
+        "outcomeText": "You attempt to walk through the locked door, it is indeed locked down, and physics stops you from passing through."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "description": "In anger, you smack the keyboard on the desk.\nBy a chimp-on-a-typewriter type miracle, you entered the password to lift the lockdown.",
+        "nextRoom": "OfficeWithGuard"
+      },
+      {
+        "item": "crowbar",
+        "description": "You wedge your crowbar under the door.\nWith all your might, you manage to pry a small opening in the door that you can fit through.\nOn the other side a guard witnesses you.\nYou throw the crowbar like a boomerang.\nIt misses the guard, but flies past him and hits the emergency airlock button.\nThe guard is sucked out into the unforgiving void of space.",
+        "nextRoom": "EscapePodsOfficeCleared"
+      }
+    ]
+  },
+  {
+    "roomName": "OfficeWithGuard",
+    "description": "The door to the office opens, and in rushes a visibly distraught guard. He yells at you to freeze.",
+    "items": ["keycard"],
+    "directionExits": [],
+    "smackExits": [
+      {
+        "item": "default",
+        "description": "Once again, you smack the keyboard.\n\"EMERGENCY LOCKDOWN ACTIVATED\"\nQuite gruesomely, the guard is pancaked from the force of the closing door.\nYou lift the lockdown, and proceed out the office door.",
+        "nextRoom": "EscapePodsOfficeCleared"
+      }
+    ]
+  },
+  {
+    "roomName": "EscapePodsOfficeCleared",
+    "description": "You are back into the escape pods hallway. The alarms are still blaring.",
+    "items": [],
+    "directionExits": [
+      {
+        "direction": "East",
+        "description": "The office.",
+        "nextRoom": "OfficeCleared",
+        "outcomeText": "You walk back into the office."
+      },
+      {
+        "direction": "West",
+        "description": "A nearby escape pod",
+        "nextRoom": "EscapePodDoorOfficeCleared",
+        "outcomeText": "You head over to the escape pod."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "",
+        "description": "Overcome with an intense urge to smack something, you hurt yourself in your confusion."
+      }
+    ]
+  },
+  {
+    "roomName": "OfficeCleared",
+    "description": "You enter into an impressive looking office, there is a desk with a computer open.",
+    "items": ["keycard"],
+    "directionExits": [
+      {
+        "direction": "West",
+        "description": "The open door to the office",
+        "nextRoom": "EscapePodsOfficeCleared",
+        "outcomeText": "You walk back to the escape pods."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "description": "You smack the keyboard once again.\n\"INVALID PASSWORD\"",
+        "nextRoom": ""
+      }
+    ]
+  },
+  {
+    "roomName": "EscapePodDoor",
+    "description": "You see an escape pod, the door to entry is locked. There is a keycard scanner to the right of the door.",
+    "items": [],
+    "directionExits": [
+      {
+        "direction": "East",
+        "nextRoom": "EscapePods",
+        "description": "The escape pods hallway.",
+        "outcomeText": "You walk away from the escape pod door."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "",
+        "description": "You smack the keycard reader.\n\"KEYCARD IS NOT IN THE AUTHORIZED USER FILE, THIS INCIDENT WILL BE REPORTED\"\nHow rude."
+      }
+    ]
+  },
+  {
+    "roomName": "EscapePodDoorOfficeCleared",
+    "description": "You see an escape pod, the door to entry is locked. There is a keycard scanner to the right of the door.",
+    "items": [],
+    "directionExits": [
+      {
+        "direction": "East",
+        "nextRoom": "EscapePodsOfficeCleared",
+        "description": "The escape pods hallway.",
+        "outcomeText": "You walk away from the escape pod door."
+      }
+    ],
+    "smackExits": [
+      {
+        "item": "default",
+        "nextRoom": "",
+        "description": "You smack the keycard reader.\n\"KEYCARD IS NOT IN THE AUTHORIZED USER FILE, THIS INCIDENT WILL BE REPORTED\"\nHow rude."
+      },
+      {
+        "item": "keycard",
+        "nextRoom": "win",
+        "description": "You swipe the keycard in the keycard reader.\n\"READING KEYCARD, PLEASE WAIT\"\n.\n..\n...\n....\nYou smack the keycard reader.\n\"ACCESS GRANTED, HAVE A SAFE FLIGHT\""
+      }
+    ]
+  },
+  {
+    "roomName": "win",
+    "description": "You enter into the escape pod, shut the door, and blast off.\nYou have successfully escaped from intergalatic prison.\nIn your closing thoughts, you remark how lax the security was to be containing as many dangerous aliens as it had.",
+    "items": [],
+    "directionExits": [],
+    "smackExits": []
   }
 ]
