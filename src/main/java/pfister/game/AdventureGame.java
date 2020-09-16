@@ -37,7 +37,6 @@ public class AdventureGame {
     return Collections.unmodifiableSet(inventory);
   }
 
-
   /**
    * Sets up a room before the player moves into it Currently removes any items that the player
    * already has in their inventory from the room

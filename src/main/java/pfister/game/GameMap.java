@@ -29,6 +29,7 @@ public class GameMap {
 
   /**
    * Loads the json file from the path, then constructs the GameMap
+   *
    * @param jsonPath the path to the JSON file
    * @throws IOException If the the json file cannot be read or does not exist at the passed
    *     location
@@ -38,10 +39,10 @@ public class GameMap {
     this(readJsonMapFile(jsonPath));
   }
   /**
-   * Constructs the game map from a json file.
-   * Creates a graph where the vertices are the rooms, and
-   * the edges are the potential exits from those rooms.
-   * Either from a "go" command (DirectionExit),or a "smack" command (SmackExit)
+   * Constructs the game map from a json file. Creates a graph where the vertices are the rooms, and
+   * the edges are the potential exits from those rooms. Either from a "go" command
+   * (DirectionExit),or a "smack" command (SmackExit)
+   *
    * @param jsonRooms a JsonArray containing a list of rooms
    * @throws InvalidArgumentException If the json file cannot be validly parsed as a game map
    */
@@ -86,7 +87,8 @@ public class GameMap {
    * @throws InvalidArgumentException If the json file is not a valid json file, or does not have a
    *     top level array object
    */
-  private static JsonArray readJsonMapFile(String jsonPath) throws IOException, InvalidArgumentException {
+  private static JsonArray readJsonMapFile(String jsonPath)
+      throws IOException, InvalidArgumentException {
     FileReader reader = new FileReader(jsonPath);
     JsonArray rooms;
     try {

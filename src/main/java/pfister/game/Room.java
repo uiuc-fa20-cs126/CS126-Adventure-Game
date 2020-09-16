@@ -7,14 +7,14 @@ import java.util.Set;
 /** Holds information about the room a current player is in */
 public class Room {
 
-  private String roomName;
-  private String description;
   /**
    * Items contained within a room Note that items are unique across the game If an item appears in
    * a room and the player already has an item with the same name, that item will not appear within
    * the room
    */
   private final Set<String> items;
+  private String roomName;
+  private String description;
 
   public Room(String roomName, String description, Set<String> items) {
     this.roomName = roomName;

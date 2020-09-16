@@ -141,12 +141,14 @@
     "roomName": "CafeteriaDoor",
     "description": "The cafeteria door is blocked by a guard, he yells at you amid the chaos to return to your cell peacefully under threat of execution.",
     "items": [],
-    "directionExits": [{
-      "direction": "North",
-      "nextRoom": "",
-      "description": "Attempt to maneuver past him.",
-      "outcomeText": "You ignore his command and start to take a step. He raises his raygun and commands you to step back.\nYou decide to follow his orders."
-    }],
+    "directionExits": [
+      {
+        "direction": "North",
+        "nextRoom": "",
+        "description": "Attempt to maneuver past him.",
+        "outcomeText": "You ignore his command and start to take a step. He raises his raygun and commands you to step back.\nYou decide to follow his orders."
+      }
+    ],
     "smackExits": [
       {
         "item": "raygun",
@@ -163,7 +165,9 @@
   {
     "roomName": "EscapePods",
     "description": "You exit the cafeteria into a long hallway with escape pods on the Western wall. Alarms are blaring.",
-    "items": ["crowbar"],
+    "items": [
+      "crowbar"
+    ],
     "directionExits": [
       {
         "direction": "East",
@@ -189,7 +193,9 @@
   {
     "roomName": "Office",
     "description": "You enter into an impressive looking office, there is a desk with a computer open. You quickly search for things useful to escape.\nWhile you are searching, the door behind you slams closed.\nOver the intercom you hear a robotic voice.\n\"EMERGENCY LOCKDOWN ACTIVATED, STAY WHERE YOU ARE\"",
-    "items": ["keycard"],
+    "items": [
+      "keycard"
+    ],
     "directionExits": [
       {
         "direction": "West",
@@ -214,7 +220,9 @@
   {
     "roomName": "OfficeWithGuard",
     "description": "The door to the office opens, and in rushes a visibly distraught guard. He yells at you to freeze.",
-    "items": ["keycard"],
+    "items": [
+      "keycard"
+    ],
     "directionExits": [],
     "smackExits": [
       {
@@ -253,7 +261,9 @@
   {
     "roomName": "OfficeCleared",
     "description": "You enter into an impressive looking office, there is a desk with a computer open.",
-    "items": ["keycard"],
+    "items": [
+      "keycard"
+    ],
     "directionExits": [
       {
         "direction": "West",

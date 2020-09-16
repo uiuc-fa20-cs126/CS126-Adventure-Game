@@ -2,9 +2,7 @@ package pfister.game;
 
 import java.util.Optional;
 
-/**
- * Holds the cardinal directions
- */
+/** Holds the cardinal directions */
 public enum Direction {
   North,
   South,
@@ -13,6 +11,7 @@ public enum Direction {
 
   /**
    * Attempts to parse a string to a direction, ignoring case
+   *
    * @param dir a cardinal direction
    * @return A optional direction, empty if the string could not be parsed to a direction
    */
